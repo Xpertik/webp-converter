@@ -6,7 +6,7 @@ Drag-and-drop PNG/JPEG to WebP converter that runs entirely in the browser. No f
   - **Con pérdida** (calidad 75 por defecto) = `cwebp -q <quality> -m 6 -sharp_yuv`
   - **Sin pérdida** = `cwebp -lossless`
 - Drop files or whole folders; changing the settings re-converts everything.
-- Download each image, or all of them as a `.zip` (duplicate names become `name (2).webp`).
+- Download each image, or all of them as a `.zip` (whitespace is removed from file names; duplicates become `name-2.webp`).
 - Conversions run in parallel Web Workers, so the page stays responsive with large batches.
 
 No TinyPNG step is needed first: the WebP encoder does its own compression.

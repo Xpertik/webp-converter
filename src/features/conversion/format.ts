@@ -6,13 +6,14 @@ export function isSupportedImage(file: { type: string; name: string }): boolean 
   return SUPPORTED_EXTENSIONS.test(file.name);
 }
 
+/** Swaps the extension for .webp and strips every whitespace character from the name. */
 export function toWebpName(name: string): string {
   const dot = name.lastIndexOf('.');
-  const base = dot > 0 ? name.slice(0, dot) : name;
-  return `${base}.webp`;
+  const base = (dot > 0 ? name.slice(0, dot) : name).replace(/\s+/g, '');
+  return `${base || 'image'}.webp`;
 }
 
-/** Numbers repeated names ("a.webp", "a (2).webp") so zip entries never collide. */
+/** Numbers repeated names ("a.webp", "a-2.webp") so zip entries never collide. */
 export function uniqueNames(names: string[]): string[] {
   const taken = new Set(names);
   const used = new Set<string>();
@@ -26,10 +27,10 @@ export function uniqueNames(names: string[]): string[] {
     const base = dot > 0 ? name.slice(0, dot) : name;
     const ext = dot > 0 ? name.slice(dot) : '';
     let n = 2;
-    let candidate = `${base} (${n})${ext}`;
+    let candidate = `${base}-${n}${ext}`;
     while (used.has(candidate) || taken.has(candidate)) {
       n += 1;
-      candidate = `${base} (${n})${ext}`;
+      candidate = `${base}-${n}${ext}`;
     }
     used.add(candidate);
     return candidate;

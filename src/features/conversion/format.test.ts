@@ -12,6 +12,15 @@ describe('toWebpName', () => {
     expect(toWebpName('noext')).toBe('noext.webp');
     expect(toWebpName('.hidden')).toBe('.hidden.webp');
   });
+
+  it('removes all whitespace from the name', () => {
+    expect(toWebpName('my photo 01.png')).toBe('myphoto01.webp');
+    expect(toWebpName(' tabs\tand  spaces .jpg')).toBe('tabsandspaces.webp');
+  });
+
+  it('falls back to "image" when the name is only whitespace', () => {
+    expect(toWebpName('   .png')).toBe('image.webp');
+  });
 });
 
 describe('uniqueNames', () => {
@@ -22,14 +31,14 @@ describe('uniqueNames', () => {
   it('numbers duplicates so no file overwrites another in the zip', () => {
     expect(uniqueNames(['a.webp', 'a.webp', 'b.webp', 'a.webp'])).toEqual([
       'a.webp',
-      'a (2).webp',
+      'a-2.webp',
       'b.webp',
-      'a (3).webp',
+      'a-3.webp',
     ]);
   });
 
   it('skips a numbered name that is already taken', () => {
-    expect(uniqueNames(['a (2).webp', 'a.webp', 'a.webp'])).toEqual(['a (2).webp', 'a.webp', 'a (3).webp']);
+    expect(uniqueNames(['a-2.webp', 'a.webp', 'a.webp'])).toEqual(['a-2.webp', 'a.webp', 'a-3.webp']);
   });
 });
 
